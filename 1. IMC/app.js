@@ -7,4 +7,23 @@ const BMIData = [
   { name: "Obésité morbide", color: "purple", range: 40 },
 ];
 
+
+const height = document.querySelector(".height_input");
+const weight = document.querySelector(".weight_input");
+const result = document.querySelector(".bmi_value")
+
+function calcul() {
+ const result_imc =  height.value * weight.value;
+ return result_imc;
+ console.log(result_imc);
+} 
+
+const calculImc = document.querySelector(".btn_form")
+calculImc.addEventListener("click", ()=> {
+const imc = calcul()
+resultElement.textContent = imc
+console.log(imc);
+});
+
+
 // IMC = poids en kg / taille² en m
