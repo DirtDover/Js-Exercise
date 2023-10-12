@@ -9,3 +9,56 @@ body {
     background: linear-gradient(to right, #ffefba, #ffffff); 
     padding: clamp(20px, 5vw, 50px) 20px 10px;
 }
+
+h1{
+    font-size: 45px;
+    margin-bottom: 50px;
+    font-weight: 300;
+    text-align: center;
+}
+h1 span{
+    font-family: Raleway;
+    font-weight: 600;
+}
+.container{
+    max-width: 600px;
+    margin: 0 auto;
+}
+.input_group:nth-child(2){
+margin-top: 30px;
+}
+.container label{
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+.container input {
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+.btn_container{
+    display: flex;
+    justify-content: center;
+    margin-top: 45px;
+}
+form button{
+    font-size: 18px;
+    min-width: 100px;
+    margin: 30px 50px;
+    padding: 10px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #f1f1f1;
+    border: none;
+    background: #006c67;
+}
+.info_txt{
+    font-size: 18px;
+    margin-top: 20px;
+    text-align: center;
+}
