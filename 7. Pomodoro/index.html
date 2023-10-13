@@ -10,8 +10,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;400;600;800&family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
   </head>
   <body>
+    <h1>Le&nbsp; <span>POMODORO</span></h1>
 
+    <div class="display">
+      <div class="block">
+        <p class="description work">Travail</p>
+        <p class="work_display_time time">30:00</p>
+      </div>
+      <div class="block">
+        <p class="description rest">Repos</p>
+        <p class="pause_display_time time">5:00</p>
+      </div>
+    </div>
     
+    <div class="buttons_container">
+      <button class="btn start_btn">
+        <img src="ressources/play.svg" alt="icone jouer">
+      </button>
+      <button class="btn reset_btn">
+        <img src="ressources/reset.svg" alt="icone reset">
+      </button>
+    </div>
+    <p class="cycle">Cycle(s) : 0</p>
+
     <script src="app.js"></script>
   </body>
 </html>
