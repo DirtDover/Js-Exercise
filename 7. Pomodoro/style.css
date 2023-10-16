@@ -52,6 +52,36 @@ text-decoration-thickness: 1px ;
   font-weight: bold;
   position: relative;
 }
+.description::after{
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background: #111 ;
+  transform-origin:left ;
+  transform: scaleX(0);
+}
+.description.active::after{
+  animation: loading 1s ease-out infinite;
+}
+@keyframes loading {
+  49%{
+    transform-origin: left;
+  }
+  50%{
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100%{
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
+
 .time{
   font-family: Inconsolata, sans-serif;
 }
