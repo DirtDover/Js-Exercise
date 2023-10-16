@@ -35,12 +35,29 @@ function handlePlayPause(){
         pause = false;
         togglePlayBtn.firstElementChild.src = "ressources/pause.svg";
         togglePlayBtn.setAttribute("data_toggle", "pause")
+
+        if(workTime){
+            handleClassAnimation({work: true, rest: false})
+        }else {
+            handleClassAnimation({work: false, rest: true})
+        }
     }else {
         pause = true;
         togglePlayBtn.firstElementChild.src = "ressources/play.svg";
         togglePlayBtn.setAttribute("data_toggle", "play")
     }
 }
+
+function handleClassAnimation(itemState){                   // fonction qui ajout la class active pour le css pour les animations
+    for(const item in itemState){
+        if(itemstate[item]){
+            document.querySelector(`.${item}`).classList.add("active")
+        }else {
+            document.querySelector(`.${item}`).classList.remove("active")
+        }
+    }
+}
+
 
 
 const cycles = document.querySelector(".cycles");               // function qui décrémente le temps en fonction de ce qui se passe + gère l'affichage des cycles 
@@ -51,16 +68,19 @@ function handleTicks(){
     if (!pause && workTime > 0){
         workTime--;
         displayWork.textContent = formattedTime(workTime)
+        handleClassAnimation({work: true, rest: false})
     }
     else if (!pause && !workTime && restTime > 0) {
         restTime--;
-        displayPause.textContent = formattedTime(restTime)
+        displayPause.textContent = formattedTime(restTime);
+        handleClassAnimation({work: false, rest: true})
     }
     else if (!pause && !worktime && !restTime){
         workTime = 1800;
         restTime = 300;
         displayWork.textContent = formattedTime(workTime)
         displayPause.textContent = formattedTime(restTime)
+        handleClassAnimation({work: true, rest: true})
 
         cyclesNumber++;
         cycles.textContent = `Cycle(s) : ${cyclesNumber}`

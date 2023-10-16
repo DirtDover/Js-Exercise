@@ -63,9 +63,10 @@ text-decoration-thickness: 1px ;
   background: #111 ;
   transform-origin:left ;
   transform: scaleX(0);
+  
 }
 .description.active::after{
-  animation: loading 1s ease-out infinite;
+  animation: loading 5s ease-out infinite;
 }
 @keyframes loading {
   49%{
