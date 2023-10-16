@@ -1,4 +1,4 @@
-# Projet Javascript
+# Projets Javascript
 
 ---
 
