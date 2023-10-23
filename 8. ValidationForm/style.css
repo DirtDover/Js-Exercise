@@ -19,6 +19,17 @@ body {
     border-radius: 5px;
     border: 1px solid #ffffffc3;
 }
+.container.shake {
+    animation: shake 0.4s;
+}
+@keyframes shake {
+    33% {
+        transform: translateX(-5px);
+    }
+    66%{
+        transform: translateX(5px);
+    }
+}
 h2{
     font-size: 30px;
     font-family: Raleway, sans-serif;
@@ -76,7 +87,7 @@ input::placeholder {
 .lines{
     width: 80%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     margin: 0 auto;
 }
@@ -85,6 +96,7 @@ input::placeholder {
     margin: 15px 5px 20px;
     width: 30%;
     position: relative;
+    display: none;
 }
 .l1{
     background-color: #cf5914;
