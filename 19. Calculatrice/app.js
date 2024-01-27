@@ -105,45 +105,52 @@ function customEval(calculation) {
 function getIndexes(operatorIndex, calculation){
 
     let rightOperand = "";
-    let endIntervalIndex;
-
-    for(let i = operatorIndex + 1; i<= calculation.length; i++){
-        if(i === calculation.length){
-            endIntervalIndex = calculation.length
-            break;
-        }
-        else if (/[\/+*-]/.test(calculation[i])){
-            endIntervalIndex = i;
-            break;
-        }
-        else {
-            rightOperand += calculation[i];
-        }
+    let lastRightOperandCharacter;
+  
+    for(let i = operatorIndex + 1; i <= calculation.length; i++) {
+      if(i === calculation.length) {
+        lastRightOperandCharacter = calculation.length;
+        break;
+      }
+      else if(/[\/+*-]/.test(calculation[i])) {
+        lastRightOperandCharacter = i;
+        break;
+      }
+      else {
+        rightOperand += calculation[i];
+      }
     }
-
+  
     let leftOperand = "";
     let startIntervalIndex;
-
-    for(let i = operatorIndex - 1; i>= 0; i--){
-        if(i === 0 && /[-]/.test(calculation[i])){
-            startIntervalIndex = 0;
-            leftOperand += "-";
-            break;
-        }
-        else if(/[\/+*-]/.test(calculation[i])){
-            startIntervalIndex = i + 1;
-            break;
-        }
-        else {
-            leftOperand += calculation[i]
-        }
+  
+    for(let i = operatorIndex - 1; i >= 0; i--) {
+      if(i === 0 && /[-]/.test(calculation[i])) {
+        startIntervalIndex = 0;
+        leftOperand += "-";
+        break;
+      }
+      else if(i === 0){
+        startIntervalIndex = 0;
+        leftOperand += calculation[i];
+        break;
+      }
+      else if(/[\/+*-]/.test(calculation[i])) {
+        startIntervalIndex = i + 1;
+        break;
+      }
+      else {
+        leftOperand += calculation[i];
+      }
     }
+  
     leftOperand = leftOperand.split("").reverse().join("");
-
+  
     return {
-        leftOperand,
-        rightOperand,
-        startIntervalIndex,
-        endIntervalIndex
+      leftOperand,
+      rightOperand,
+      startIntervalIndex,
+      lastRightOperandCharacter
     }
-}
+  
+  }
