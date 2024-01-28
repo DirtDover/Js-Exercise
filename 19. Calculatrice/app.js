@@ -17,6 +17,11 @@ const resultDisplay = document.querySelector(".result")
 function handleDigits(e) {
     const buttonValue = e.target.getAttribute("data-action");           // on récupère la valeur du btn sur lequel on clique
 
+    if(calculatorData.displayedResults){                                    // si des résultat sont affiché on reset
+        calculationDisplay.textContent = "";
+        calculatorData.calculation = "";
+        calculatorData.displayedResults = false;    
+    }
     if(calculatorData.calculation === "0" ) calculatorData.calculation = ""   // on évite de rajouter des 0 quand on commence par 0
     
 
@@ -35,17 +40,24 @@ operatorsBtns.forEach(btn => btn.addEventListener("click", handleOperators))
 function handleOperators(e) {
     const buttonValue = e.target.getAttribute("data-action");
 
-    if(!calculatorData.calculation && buttonValue === "-"){                 // on veut afficher un - pour commencer, on veut commencer par un chiffre négatif
+    if(calculatorData.displayedResults){                                    // si on clique avec un resultat affiché sur un operator on veut effacer l'écran mais garder le calcul en mémoir pour continuer le calcul
+        calculationDisplay.textContent = "";
+        calculatorData.calculation = calculatorData.result += buttonValue
+        resultDisplay.textContent = calculatorData.calculation;
+        calculatorData.displayedResults = false ;
+        return;
+    }
+    else if(!calculatorData.calculation && buttonValue === "-"){                 // on veut afficher un - pour commencer, on veut commencer par un chiffre négatif
         calculatorData.calculation += buttonValue;
         resultDisplay.textContent = calculatorData.calculation;
         return ;
     }
     else if (!calculatorData.calculation) return ;                           // empeche de commencer pa un * ou un / ou un  +. Si rien n'est affiché a part un - on return si on clique sur un btn +, / ou * 
-    else if (calculatorData.calculation.slice(-1).match(/[\/+*-]/)){        //si le dernier élément (slice(-1)) match avec un des opérateur on le change, on ajoute pas un autre opérateur. (slice(0, -1) + buttonValue)
+    else if (calculatorData.calculation.slice(-1).match(/[\/+*-]/) && calculatorData.calculation.length !== 1){        //si le dernier élément (slice(-1)) match avec un des opérateur on le change, on ajoute pas un autre opérateur. (slice(0, -1) + buttonValue)
         calculatorData.calculation = calculatorData.calculation.slice(0, -1) + buttonValue;
         resultDisplay.textContent = calculatorData.calculation;
     }
-    else {
+    else if(calculatorData.calculation.length !== 1) {
         calculatorData.calculation += buttonValue;                          // sinon on ajoute simplement l'opérator a la suite des touches précédement taper
         resultDisplay.textContent = calculatorData.calculation;
     }
@@ -65,9 +77,12 @@ function handleEqualBtn(){
         }, 2500)
         return;
     }
-    else if (!calculatorData.displayedResults){                                 // si le résultat n'est aps affiché , on affiche le résultat
+    else if(!calculatorData.displayedResults){
         calculatorData.result = customEval(calculatorData.calculation)
-    }
+        resultDisplay.textContent = calculatorData.result;
+        calculationDisplay.textContent = calculatorData.calculation;
+        calculatorData.displayedResults = true;
+      }
 }
 
 // Custom eval
@@ -96,9 +111,47 @@ function customEval(calculation) {
         }
     }
 
-    const operands = getIndexes(operatorIndex, calculation)
-    console.log(operands);
-}
+    const operandsInfo = getIndexes(operatorIndex, calculation)
+    
+    // différent cas en fonction de l'operator
+
+    let currentCalculationResult;
+
+    switch(operator){                           // opperand de gauche + celui de droite. le Number sert a transformé la chaine de caractère en nombre
+        case "+":           
+            currentCalculationResult = Number(operandsInfo.leftOperand) + Number(operandsInfo.rightOperand)
+            break;
+        case "-":           
+            currentCalculationResult = Number(operandsInfo.leftOperand) - Number(operandsInfo.rightOperand)
+            break;
+        case "*":           
+            currentCalculationResult = Number(operandsInfo.leftOperand) * Number(operandsInfo.rightOperand)
+            break;
+        case "/":           
+            currentCalculationResult = Number(operandsInfo.leftOperand) / Number(operandsInfo.rightOperand)
+            break;     
+    }
+
+    // calcul intermédiaire quand il y a plusieurs operator 
+    let updatedCalculation = calculation.replace(calculation.slice(operandsInfo.startIntervalIndex, operandsInfo.lastRightOperandCharacter), currentCalculationResult.toString())
+
+    if(/[\/+*-]/.test(updatedCalculation.slice(1))) {
+      customEval(updatedCalculation)
+    }
+  
+    console.log(updatedCalculation.split("."));
+    if(updatedCalculation.includes(".")) {
+      if(updatedCalculation.split(".")[1].length === 1){
+        return Number(updatedCalculation).toString();
+      }
+      else if(updatedCalculation.split(".")[1].length > 1) {
+        return Number(updatedCalculation).toFixed(2).toString();
+      }
+    }
+    else {
+      return updatedCalculation;
+    }
+  }
 
 // operand de gauche et de droite
 
@@ -154,3 +207,37 @@ function getIndexes(operatorIndex, calculation){
     }
   
   }
+
+// btn reset 
+
+const resetButton = document.querySelector("[data-action='c']");
+
+resetButton.addEventListener("click", reset);
+
+function reset(){
+    calculatorData.calculation = "";
+    calculatorData.displayedResults = false;
+    calculatorData.result = "";
+    resultDisplay.textContent = "0";
+    calculationDisplay.textContent = ""
+}
+
+// Btn CE
+
+const clearEntryButton = document.querySelector("[data-action='ce']");
+
+clearEntryButton.addEventListener("click", clearEntry);
+
+function clearEntry(){
+
+    if(!calculatorData.displayedResults){                               // si il n'y a pas de result affiché
+        if(resultDisplay.textContent[0] === "0") return;                // si on affiche 0 on return
+        else if(resultDisplay.textContent.length === 1 ){               // si il n'y a qu'un élément affiché on repasse a 0
+            calculatorData.calculation = "0"
+        }
+        else {
+            calculatorData.calculation = calculatorData.calculation.slice(0, -1)     // sinon on slice le dernier élément
+        }
+        resultDisplay.textContent = calculatorData.calculation;
+    }
+}
